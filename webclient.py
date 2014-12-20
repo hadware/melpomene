@@ -17,6 +17,7 @@ class WebClient():
         self.opener = urllib2.build_opener()
 
     def get_cache_path(self):
+        """Returns the path to the folder where the fragments are stored"""
         return self.tmp_folder + "/audio_fragments/"
 
     def build_url(self, path):
