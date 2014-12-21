@@ -39,12 +39,13 @@ class DialogParser():
         """Parses a dialog using the text class attribute"""
         lines = re.compile(r'[\n]+', re.UNICODE).split(self.text)
 
-
         self.dialog = []
         for line in lines:
-            splitted = line.split(":", 1)
-            self.dialog.append({"voice" : self.check_voice(splitted[0].strip()),
-                                "text" : splitted[1]})
+            if line != "":
+                splitted = line.split(":", 1)
+                print(splitted)
+                self.dialog.append({"voice" : self.check_voice(splitted[0].strip()),
+                                    "text" : splitted[1]})
 
     def parse_from_string(self, text):
         self.text = text

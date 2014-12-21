@@ -1,5 +1,5 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 __author__ = 'hadware'
 
 from sound_manager import SoundManager
@@ -15,27 +15,34 @@ if __name__ == "__main__":
     #creating the web client
     client = WebClient()
 
-    #retrieving the available voice list and giving it to the parser constructor
-    parser = DialogParser(voices = client.get_voices())
-
-    #parsing the file into a "dialog" (list of voices and their lines)
-    try:
-        dialog = parser.parse_from_file(os.path.abspath(argv[1]))
-
-    except VoiceNotFound:
-        print("Les voix ne sont pas les bonnes!")
+    if argv[1] == "--voices":
+        voices_list = client.get_full_voices()
+        for langage_group in voices_list:
+            print("Langue : %s" % langage_group["language"])
+            for voice in langage_group["voices"]:
+                print("\t - %s" % voice)
     else:
-        #using the web client to retrieve the rendered sound files
-        sound_files = [client.get_rendered_audio(line["voice"], line["text"]) for line in dialog]
+        #retrieving the available voice list and giving it to the parser constructor
+        parser = DialogParser(voices = client.get_voices())
 
-        #making the sound manager render the final sound file
-        sound_manager = SoundManager(file_list=sound_files)
-        rendered_file = sound_manager.render_dialog()
+        #parsing the file into a "dialog" (list of voices and their lines)
+        try:
+            dialog = parser.parse_from_file(os.path.abspath(argv[1]))
 
-        #copying the rendered file to the cwd
-        if len(argv) == 3: #if there's a new name argument
-            shutil.copyfile(rendered_file, os.getcwd() + "/" + argv[2])
+        except VoiceNotFound:
+            print("Les voix ne sont pas les bonnes! Utilise l'option --voices pour afficher les voix disponibles.")
         else:
-            shutil.copyfile(rendered_file, os.getcwd())
+            #using the web client to retrieve the rendered sound files
+            sound_files = [client.get_rendered_audio(line["voice"], line["text"]) for line in dialog]
+
+            #making the sound manager render the final sound file
+            sound_manager = SoundManager(file_list=sound_files)
+            rendered_file = sound_manager.render_dialog()
+
+            #copying the rendered file to the cwd
+            if len(argv) == 3: #if there's a new name argument
+                shutil.copyfile(rendered_file, os.getcwd() + "/" + argv[2])
+            else:
+                shutil.copyfile(rendered_file, os.getcwd())
 
 

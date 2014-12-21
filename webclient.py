@@ -18,6 +18,10 @@ class WebClient():
         self.opener = urllib2.build_opener()
         try:
             os.mkdir(self.tmp_folder)
+        except OSError:
+            pass
+
+        try:
             os.mkdir(self.get_cache_path())
         except OSError:
             pass
@@ -37,18 +41,36 @@ class WebClient():
         request.add_header('Referer', self.build_url("fr"))
         return request
 
-    def get_voices(self):
-        """Retrieve a list of all the voices"""
-        #retrieving the json object that contains all the available voices
+    def retrieve_voice_list(self):
+        """simply retrieves the voice json"""
         request = self.base_request("voices.json")
-        voice_json = json.loads(self.opener.open(request).read())
+        self.voice_json = json.loads(self.opener.open(request).read())
+
+    def get_voices(self):
+        """Retrieve a simple list of all the voices"""
+        #retrieving the json object that contains all the available voices
+        self.retrieve_voice_list()
 
         #gathering all the voice names and leaving out the rest
         complete_voice_list = []
-        for language_entry in voice_json["groups"]:
+        for language_entry in self.voice_json["groups"]:
             complete_voice_list += [voice["name"] for voice in language_entry["voices"]]
 
         return complete_voice_list
+
+    def get_full_voices(self):
+        """Retrieve a list of langages grouped by langages"""
+        #retrieving the json object that contains all the available voices
+        self.retrieve_voice_list()
+
+        #gathering all the voice names and leaving out the rest
+        complete_voice_list = []
+        for language_entry in self.voice_json["groups"]:
+            complete_voice_list.append({ "voices" : [voice["name"] for voice in language_entry["voices"]],
+                                         "language" : language_entry["name"]})
+
+        return complete_voice_list
+
 
     def get_rendered_audio(self, voice, text):
         """Retrieves a MP3 of the rendered audio, saves it in tmp_folder, returns the filename"""
