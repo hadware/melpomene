@@ -3,8 +3,7 @@ voxpopuli
 
 Un synthétiseur de texte basé sur le service web de Voxygen (et sur son petit reverse opéré par [tibounise](https://github.com/tibounise/PHP-Voxygen) sur Github et [mGeek](http://mgeek.fr/) sur la toile).
 
-Dépendances
-===
+## Dépendances
 
 Pydub : il suffit de l'installer avec pydub avec:
 
@@ -18,8 +17,7 @@ Pydub nécessite ffmpeg (ou avconv pour ceux qui sont dans le vent). On l'instal
     # ffmpeg
     apt-get install ffmpeg libavcodec-extra-53
 
-Fonctionnement
-===
+## Fonctionnement
 
 On utilise le script en CLI, les paramètres sont le texte d'entrée (un dialogue), et le nom du fichier de sortie.
 La commande est donc de la forme
@@ -44,3 +42,11 @@ Aller, un petit exemple de dialogue pour voir:
     Zozo : Mais fermez vos putains de gueule bordel
 
 (Notez que certains mots sont censurés par le service, mais que je ne tarderai pas à implémenter le fameux Grommofilter de tibounise)
+
+## Notes Légales (lol)
+L'utilisation de PHP Voxygen doit se faire uniquement dans le but d'évaluer les services proposés par [Voxygen SAS](http://voxygen.fr), conformément aux [mentions légales](http://voxygen.fr/fr/content/mentions-legales) du démonstrateur de Voxygen.
+
+Les fichiers audio produits par Voxygen SAS sont protégés par le droit d'auteur, et ne doivent pas être diffusés sans l'autorisation de Voxygen SAS.
+
+PHP Voxygen a été développé en toute indépendance de Voxygen SAS, et n'est pas affilié à Voxygen SAS.
+
