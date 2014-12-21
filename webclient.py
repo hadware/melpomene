@@ -1,20 +1,26 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'hadware'
 
 import urllib2, urllib
 import json
 import hashlib
 import os
+from datetime import datetime
 
 class WebClient():
     """Mainly a class to call when there's something to fetch on the voxygen 'API' """
-
-
 
     def __init__(self, voxygen_domain="voxygen.fr", tmp_folder = "/tmp/vox_populi"):
         """Construtor"""
         self.voxygen_domain = voxygen_domain
         self.tmp_folder = tmp_folder
         self.opener = urllib2.build_opener()
+        try:
+            os.mkdir(self.tmp_folder)
+            os.mkdir(self.get_cache_path())
+        except OSError:
+            pass
 
     def get_cache_path(self):
         """Returns the path to the folder where the fragments are stored"""
@@ -47,14 +53,14 @@ class WebClient():
     def get_rendered_audio(self, voice, text):
         """Retrieves a MP3 of the rendered audio, saves it in tmp_folder, returns the filename"""
 
-        filename = hashlib.md5(voice + text)
+        filename = hashlib.md5((voice + text).encode('utf8')).hexdigest() + ".mp3"
         if os.path.isfile(self.get_cache_path() + filename):
             # file has already been rendered, we return the existing file name
             return self.get_cache_path() + filename
         else: #file hasn't been rendered, we query the API for the file
             #setting get args for the request
             get_args = urllib.urlencode({"method" : "redirect",
-                                         "text" : text,
+                                         "text" : text.encode('utf8'),
                                          "voice" : voice,
                                          "ts" : datetime.now().strftime("%s%f")[:-3]})
             request = self.base_request("sites/all/modules/voxygen_voices/assets/proxy/index.php?" + get_args)

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'hadware'
 import os
 import re
@@ -22,8 +24,8 @@ class DialogParser():
             self.load_text_file(kwargs["filepath"])
 
     def load_text_file(self, filepath):
-        with open(os.path.abspath(filepath), "r+") as text_file:
-            self.text = text_file.read()
+        with open(os.path.abspath(filepath), mode = "r+") as text_file:
+            self.text = unicode(text_file.read(), "utf-8")
 
     def check_voice(self, input_voice):
         """Checks if the input voice string is a valid voice, if voice is not found, it raises an error"""
@@ -35,7 +37,9 @@ class DialogParser():
 
     def parse_dialog(self):
         """Parses a dialog using the text class attribute"""
-        lines = re.split(r'[\n]+', self.text)
+        lines = re.compile(r'[\n]+', re.UNICODE).split(self.text)
+
+
         self.dialog = []
         for line in lines:
             splitted = line.split(":", 1)

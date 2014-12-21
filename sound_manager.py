@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'hadware'
 from pydub import AudioSegment
 import hashlib
+import os
 
 class SoundManager():
     """Takes care of tracking sound files, and makes the final completed sound file"""
@@ -9,7 +12,15 @@ class SoundManager():
         """Constructor"""
         self.tmp_folder = tmp_folder
         self.file_list = file_list
+        try:
+            os.mkdir(self.get_cache_path())
+        except OSError:
+            pass
 
+        try:
+            os.mkdir(self.get_render_path())
+        except OSError:
+            pass
 
     def get_cache_path(self):
         """Returns the folder where the rendered lines are stored"""
@@ -25,14 +36,15 @@ class SoundManager():
             self.file_list = file_list
 
         #loading all mp3 files
-        full_dialog = AudioSegment.from_mp3(file_list[0])
+        full_dialog = AudioSegment.empty()
         silence = AudioSegment.silent(100)
-        for i, filename in enumerate(file_list):
-            if i !=0:
-                full_dialog += AudioSegment.from_mp3(filename) + silence
+        for i, filename in enumerate(self.file_list):
+            full_dialog += AudioSegment.from_mp3(filename) + silence
 
-        rendered_file_name = self.get_render_path() + hashlib.md5("-".join(file_list)) + ".mp3"
-        full_dialog.export(rendered_file_name, format="mp3")
+        print(self.file_list)
+
+        rendered_file_name = self.get_render_path() + hashlib.md5("-".join(self.file_list)).hexdigest() + ".ogg"
+        full_dialog.export(rendered_file_name, format="ogg", codec="libvorbis")
         return rendered_file_name
 
 

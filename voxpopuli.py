@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'hadware'
 
 from sound_manager import SoundManager
@@ -9,16 +11,17 @@ import shutil
 
 """This is the main module"""
 
-if __name__ == "main":
+if __name__ == "__main__":
     #creating the web client
     client = WebClient()
 
     #retrieving the available voice list and giving it to the parser constructor
-    parser = DialogParser(voice = WebClient.get_voices())
+    parser = DialogParser(voices = client.get_voices())
 
     #parsing the file into a "dialog" (list of voices and their lines)
     try:
         dialog = parser.parse_from_file(os.path.abspath(argv[1]))
+
     except VoiceNotFound:
         print("Les voix ne sont pas les bonnes!")
     else:
