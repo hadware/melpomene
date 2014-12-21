@@ -21,8 +21,11 @@ Pydub nécessite ffmpeg (ou avconv pour ceux qui sont dans le vent). On l'instal
 
 On utilise le script en CLI, les paramètres sont le texte d'entrée (un dialogue), et le nom du fichier de sortie.
 La commande est donc de la forme
+
     ./voxpopuli FILE [OUTPUT FILE] | --voices
+
 Soit donc par exemple
+
     ./voxpopuli texte.txt rendu.ogg
 
 Nota Bene:
@@ -30,7 +33,8 @@ Nota Bene:
  * Si le fichier de sortie n'est pas spécifié, c'est un fichier avec un hash MD5 qui est copié.
  * l'option --voices (passée seule en paramètre) permet de voir les voix disponibles
 
-Si vous avez lu jusqu'ici, c'est probablement que vous voulez savoir comment on formate un dialogue pour le programme. C'est très simple: on spécifie une voix, puis la ligne qu'elle devra "lire". Par exemple:
+Si vous avez lu jusqu'ici, c'est probablement que vous voulez savoir comment on formatte un dialogue pour le programme. C'est très simple: on spécifie une voix, puis la ligne qu'elle devra "lire". Par exemple:
+
     JeanJean : Eh bien, il fait sacrament froid ici!
 
 Un dialogue est une suite de "répliques" des voix. Tant qu'une voix ne termine pas sa réplique, *il ne faut pas* sauter de ligne (au risque de voir le parser un peu simplet du script péter les plombs). Inutile aussi de mettre des guillemets pour signifier le début et fin d'une réplique!
@@ -44,9 +48,11 @@ Aller, un petit exemple de dialogue pour voir:
 (Notez que certains mots sont censurés par le service, mais que je ne tarderai pas à implémenter le fameux Grommofilter de tibounise)
 
 ## Notes Légales (lol)
-L'utilisation de PHP Voxygen doit se faire uniquement dans le but d'évaluer les services proposés par [Voxygen SAS](http://voxygen.fr), conformément aux [mentions légales](http://voxygen.fr/fr/content/mentions-legales) du démonstrateur de Voxygen.
+L'utilisation de voxpopuli doit se faire uniquement dans le but d'évaluer les services proposés par [Voxygen SAS](http://voxygen.fr), conformément aux [mentions légales](http://voxygen.fr/fr/content/mentions-legales) du démonstrateur de Voxygen.
 
 Les fichiers audio produits par Voxygen SAS sont protégés par le droit d'auteur, et ne doivent pas être diffusés sans l'autorisation de Voxygen SAS.
 
-PHP Voxygen a été développé en toute indépendance de Voxygen SAS, et n'est pas affilié à Voxygen SAS.
+Voxpopuli a été développé en toute indépendance de Voxygen SAS, et n'est pas affilié à Voxygen SAS.
+
+*Toute ressemblance de ces note à celles de PHP-voxygen est fortuite*
 
