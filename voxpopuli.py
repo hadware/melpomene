@@ -11,11 +11,39 @@ import shutil
 
 """This is the main module"""
 
+def print_help():
+    """Prints out the help"""
+    print('''
+    Utilisation : ./voxpopuli dialogue.txt rendu.ogg
+
+    Pour afficher les voix disponibles :
+        ./voxpopuli --voices
+
+    Ce message d'aide s'affiche avec
+        ./voxpopuli --help
+
+    NB: Le fichier du dialogue doit être sans retour à la ligne pour la même tirade d'une voix.
+    Exemple correct:
+        Zozo: Je vais te punir, petit baptou fragile.
+        Loic : Vazy mon grand, explose moi le conduit.
+    Exemple incorrect:
+        Zozo: Je vais te punir,
+        petit baptou fragile.
+        Loic : Vazy mon grand, explose moi le conduit.
+            ''')
+
 if __name__ == "__main__":
     #creating the web client
     client = WebClient()
 
-    if argv[1] == "--voices":
+    #affichage de l'aide
+    if len(argv) == 1:
+        print_help()
+
+    elif argv[1] in ["help", "-h", "--help", "-help"]:
+        print_help()
+
+    elif argv[1] == "--voices":
         voices_list = client.get_full_voices()
         for langage_group in voices_list:
             print("Langue : %s" % langage_group["language"])
