@@ -7,15 +7,15 @@ Un synthétiseur de texte basé sur le service web de Voxygen (et sur son petit 
 
 Pydub : il suffit de l'installer avec pydub avec:
 
-    pip install pydub
+    sudo pip install pydub
 
 Pydub nécessite ffmpeg (ou avconv pour ceux qui sont dans le vent). On l'installe avec:
 
     # libav
-    apt-get install libav-tools libavcodec-extra-53
+    sudo apt-get install libav-tools libavcodec-extra-53
     # OU
     # ffmpeg
-    apt-get install ffmpeg libavcodec-extra-53
+    sudo apt-get install ffmpeg libavcodec-extra-53
 
 ## Fonctionnement
 
@@ -30,7 +30,7 @@ Soit donc par exemple
 
 Nota Bene:
  * Le rendu sonore est pour l'instant uniquement exportable en OGG avec codec vorbis.
- * Si le fichier de sortie n'est pas spécifié, c'est un fichier avec un hash MD5 qui est copié.
+ * Si le fichier de sortie n'est pas spécifié, c'est un fichier avec un nom en hash MD5 qui est copié.
  * l'option --voices (passée seule en paramètre) permet de voir les voix disponibles
 
 Si vous avez lu jusqu'ici, c'est probablement que vous voulez savoir comment on formatte un dialogue pour le programme. C'est très simple: on spécifie une voix, puis la ligne qu'elle devra "lire". Par exemple:
@@ -54,5 +54,5 @@ Les fichiers audio produits par Voxygen SAS sont protégés par le droit d'auteu
 
 Voxpopuli a été développé en toute indépendance de Voxygen SAS, et n'est pas affilié à Voxygen SAS.
 
-*Toute ressemblance de ces note à celles de PHP-voxygen est fortuite*
+*Toutes ressemblances de ces notes à celles de PHP-voxygen sont fortuites.*
 

@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'hadware'
 
-from sound_manager import SoundManager
-from parser import DialogParser, VoiceNotFound
-from webclient import WebClient
 from sys import argv
 import os
 import shutil
+
+from utils import *
 
 """This is the main module"""
 
