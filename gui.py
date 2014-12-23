@@ -1,71 +1,55 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-
 from gui import *
+from gi.repository import Gtk
 
 
-class VoxPopuliMain(gtk.Window):
+class VoxPopuliMain(Gtk.Window):
     def __init__(self):
         super(VoxPopuliMain, self).__init__()
 
         self.set_title("VoxPopuli")
-        self.set_size_request(500, 500)
-        self.set_position(gtk.WIN_POS_CENTER)
-        self.connect("destroy", gtk.main_quit)
+        self.connect("destroy", Gtk.main_quit)
 
-        ### the bottom layout
-        self.main_box = gtk.VBox(homogeneous = False, spacing = 2)
-        self.controls_box = gtk.HBox(homogeneous = True,spacing =  2)
-        self.main_box.pack_start(self.controls_box, False, False, 1)
-        self.render_control_resize = gtk.Alignment()
-        self.render_control_resize.set(xalign = 0.5, xscale = 0.3, yalign = 0, yscale = 1.0)
-        self.controls_box.left_box = gtk.VBox(homogeneous = False, spacing = 1)
-        self.controls_box.left_box.pack_start(self.render_control_resize, False, False,0)
-        self.controls_box.right_box = gtk.VBox(homogeneous = False, spacing = 1)
-        self.controls_box.pack_start(self.controls_box.left_box, False, True, 0)
-        self.controls_box.pack_end(self.controls_box.right_box, False, True, 0)
-        self.controls_box.right_box.top_box = gtk.HBox(homogeneous = False, spacing = 1)
-        self.controls_box.right_box.pack_start(self.controls_box.right_box.top_box, False, True, 0)
+        ### the layout
+        self.grid = Gtk.Table(12, 6, True)
+        self.grid.set_row_spacing(2, 10k)
+        self.add(self.grid)
 
         ### layout elements
         #main text area
-        self.dialog_textarea = gtk.TextView()
+        self.dialog_textarea = Gtk.TextView()
         self.dialog_textarea.set_editable(True)
-        self.dialog_textarea.set_justification(gtk.JUSTIFY_LEFT)
-        self.dialog_textarea.set_wrap_mode(gtk.WRAP_WORD)
+        self.dialog_textarea.set_justification(Gtk.Justification.LEFT)
+        self.dialog_textarea.set_wrap_mode(Gtk.WrapMode.WORD)
         #sound and render control buttons
-        self.button_render = ImgButton("Rendu", gtk.STOCK_CONVERT)
-        self.button_play = ImgButton("Lecture", gtk.STOCK_MEDIA_PLAY)
-        self.button_pause = ImgButton("Pause", gtk.STOCK_MEDIA_PAUSE)
+        self.button_render = ImgButton("Rendu", Gtk.STOCK_CONVERT)
+        self.button_play = ImgButton("Lecture", Gtk.STOCK_MEDIA_PLAY)
+        self.button_pause = ImgButton("Pause", Gtk.STOCK_MEDIA_PAUSE)
         #render progress bar, and playback progress bar
-        self.render_progress = gtk.ProgressBar()
-        self.sound_run_scale = gtk.HScale()
-        self.sound_run_scale.set_digits(3)
-        self.sound_run_scale.set_draw_value(gtk.FALSE)
+        self.render_progress = Gtk.ProgressBar()
+        self.render_progress.set_fraction(0.33)
+        self.sound_progress_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0.0, 100.0, 0.5)
+        self.sound_progress_scale.set_digits(2)
+        self.sound_progress_scale.set_draw_value(False)
 
-        ### adding the elements to the layout
-        self.main_box.pack_end(self.dialog_textarea, True, True, 5)
-        self.controls_box.left_box.pack_start(self.render_control_resize, False, False, 1)
-        self.render_control_resize.add(self.button_render)
-        self.controls_box.left_box.pack_start(self.render_progress, False, False, 1)
-        self.controls_box.right_box.top_box.pack_start(self.button_play, False, True, 1)
-        self.controls_box.right_box.top_box.pack_start(self.button_pause, False, True, 1)
-        self.controls_box.right_box.pack_end(self.sound_run_scale, False, True, 3)
+        ### adding the elements to the grid layout
+        self.grid.attach(self.button_render, 1, 2, 0, 1)
+        self.grid.attach(self.render_progress, 0, 3, 1, 2)
+        self.grid.attach(self.button_play, 3, 4, 0, 1)
+        self.grid.attach(self.button_pause, 4, 5, 0, 1)
+        self.grid.attach(self.sound_progress_scale, 3, 6, 1, 2)
+        self.grid.attach(self.dialog_textarea, 0, 6, 2, 12)
 
         #self.quit.connect("clicked", self.on_clicked)
 
-        self.add(self.main_box)
+
         self.show_all()
-        self.controls_box.show_all()
-        self.controls_box.right_box.show_all()
 
     def emit_signal(self):
 
-        event = gtk.gdk.Event(gtk.gdk.BUTTON_RELEASE)
+        event = Gtk.gdk.Event(Gtk.gdk.BUTTON_RELEASE)
         event.button = 1
         event.window = self.quit.window
         event.send_event = True
@@ -78,4 +62,4 @@ class VoxPopuliMain(gtk.Window):
 
 if __name__ == "__main__":
     VoxPopuliMain()
-    gtk.main()
+    Gtk.main()
