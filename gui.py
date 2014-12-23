@@ -14,7 +14,7 @@ class VoxPopuliMain(Gtk.Window):
 
         ### the layout
         self.grid = Gtk.Table(12, 6, True)
-        self.grid.set_row_spacing(2, 10k)
+        self.grid.set_row_spacing(2, 10)
         self.add(self.grid)
 
         ### layout elements
