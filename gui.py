@@ -3,6 +3,7 @@
 
 from gui import *
 from gi.repository import Gtk
+from utils import WebClient
 
 
 class VoxPopuliMain(Gtk.Window):
@@ -12,13 +13,24 @@ class VoxPopuliMain(Gtk.Window):
         self.set_title("VoxPopuli")
         self.connect("destroy", Gtk.main_quit)
 
+        #initilizing the webclient, to retrieve voices
+        self.webclient = WebClient()
+
         ### the layout
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.add(self.box)
         self.grid = Gtk.Table(12, 6, True)
         self.grid.set_row_spacing(2, 10)
-        self.add(self.grid)
+        self.box.pack_end(self.grid, False, False, 0)
+
+        #rendering and adding the menu
+        self.voxpopuli_menu = VoxPopuliMenu(self.webclient.get_voices())
+        self.box.pack_start(self.voxpopuli_menu.menubar, False, False, 0)
 
         ### layout elements
         #main text area
+        self.textarea_scrollwindow = Gtk.ScrolledWindow()
+        self.textarea_scrollwindow.set_vexpand(True)
         self.dialog_textarea = Gtk.TextView()
         self.dialog_textarea.set_editable(True)
         self.dialog_textarea.set_justification(Gtk.Justification.LEFT)
@@ -40,12 +52,14 @@ class VoxPopuliMain(Gtk.Window):
         self.grid.attach(self.button_play, 3, 4, 0, 1)
         self.grid.attach(self.button_pause, 4, 5, 0, 1)
         self.grid.attach(self.sound_progress_scale, 3, 6, 1, 2)
-        self.grid.attach(self.dialog_textarea, 0, 6, 2, 12)
+        self.grid.attach(self.textarea_scrollwindow, 0, 6, 2, 12)
+        self.textarea_scrollwindow.add(self.dialog_textarea)
 
         #self.quit.connect("clicked", self.on_clicked)
 
 
         self.show_all()
+        self.voxpopuli_menu.menubar.show()
 
     def emit_signal(self):
 

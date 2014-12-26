@@ -8,6 +8,14 @@ import hashlib
 import os
 from datetime import datetime
 
+class Voice():
+    """Object storing a voice"""
+    def __init__(self, webclient, name, language):
+        self.webclient = webclient
+        self.name = name
+        self.language = language
+
+
 class WebClient():
     """Mainly a class to call when there's something to fetch on the voxygen 'API' """
 
