@@ -127,7 +127,7 @@ class VoxPopuliMain(Gtk.Window):
         if response is not None:
              self.render_manager.file_manager.save_render(response)
 
-    def quit(self):
+    def quit(self, widget):
         Gtk.main_quit()
 
 if __name__ == "__main__":

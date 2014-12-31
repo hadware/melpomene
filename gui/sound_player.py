@@ -26,30 +26,28 @@ class SoundPlayer():
         self.playbin.set_property('uri', 'file://'+os.path.abspath(self.file_manager.render_file_path))
 
     def reset_player(self):
-        self.pause() #pausing everything, in case
+        self.pause(None) #pausing everything, in case
         self.playbin.set_state(Gst.State.READY)
         self.reset_current_file()
         self.duration_updated = False
         self.slider.set_value(0.0)
 
 
-    def play(self):
+    def play(self, widget):
         #checking if a render has been made
-        if self.playbin.get_property("uri") is not None:
-            self.playbin.set_state(Gst.State.PLAYING)
-            self.is_playing = True
+        self.playbin.set_state(Gst.State.PLAYING)
+        self.is_playing = True
 
-            #starting up a timer to check on the current playback value
-            GLib.timeout_add(1000, self.update_slider)
+        #starting up a timer to check on the current playback value
+        GLib.timeout_add(1000, self.update_slider)
 
-    def pause(self):
+    def pause(self, widget):
         self.playbin.set_state(Gst.State.PAUSED)
         self.is_playing = False
 
     def on_slider_seek(self, widget):
-        if self.playbin.get_property("uri") is not None:
-            seek_time_secs = self.slider.get_value()
-            self.playbin.seek_simple(Gst.Format.TIME,  Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT, seek_time_secs * Gst.SECOND)
+        seek_time_secs = self.slider.get_value()
+        self.playbin.seek_simple(Gst.Format.TIME,  Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT, seek_time_secs * Gst.SECOND)
 
     def update_slider(self):
         if not self.is_playing:

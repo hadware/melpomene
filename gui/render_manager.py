@@ -27,8 +27,9 @@ class RenderManager():
 
         sound_files = []
         line_render_progress_increment = 0.8 / len(self.dialog)
-        for i, line in enumerate(self.dialog):
-            self.progress_bar.set_fraction = self.progress_bar.get_fraction + line_render_progress_increment
+        for line in self.dialog:
+            print("line rendered!")
+            self.progress_bar.set_fraction(self.progress_bar.get_fraction() + line_render_progress_increment)
             sound_files.append(self.webclient.get_rendered_audio(line["voice"], line["text"]))
 
 
@@ -38,4 +39,4 @@ class RenderManager():
         self.progress_bar.set_fraction(1.0)
 
         #storing the file in the file manager
-        self.file_manager.dialog_file_path = rendered_file
+        self.file_manager.render_file_path = rendered_file
