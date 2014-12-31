@@ -34,11 +34,14 @@ class VoxPopuliFileManager():
         #copying the rendered file to the specified filepath
         shutil.copyfile(self.render_file_path, filepath)
 
-    def add_filter(self, dialog, pattern, name):
+    def add_filter(self, dialog, mime_type, name):
         """Adds a filter to dialog"""
         filter = Gtk.FileFilter()
         filter.set_name(name)
-        filter.add_pattern(pattern)
+        if mime_type == "*":
+            filter.add_pattern("*")
+        else:
+            filter.add_mime_type(mime_type)
         dialog.add_filter(filter)
 
     def add_text_file_filters(self, dialog):
