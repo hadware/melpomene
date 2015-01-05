@@ -28,9 +28,8 @@ class RenderManager():
         sound_files = []
         line_render_progress_increment = 0.8 / len(self.dialog)
         for line in self.dialog:
-            print("line rendered!")
-            self.progress_bar.set_fraction(self.progress_bar.get_fraction() + line_render_progress_increment)
             sound_files.append(self.webclient.get_rendered_audio(line["voice"], line["text"]))
+            self.progress_bar.set_fraction(self.progress_bar.get_fraction() + line_render_progress_increment)
 
 
         #making the sound manager render the final sound file

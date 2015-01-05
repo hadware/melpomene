@@ -3,7 +3,6 @@
 
 from gui import *
 from gi.repository import Gtk
-from utils import WebClient
 
 class VoxPopuliMain(Gtk.Window):
     def __init__(self):
@@ -117,7 +116,7 @@ class VoxPopuliMain(Gtk.Window):
                                                 text_buffer.get_end_iter(),
                                                 False))
 
-            self.render_manager.file_manager.save_file(text , response)
+            self.render_manager.file_manager.save_file(unicode(text, "utf-8"), response)
 
 
     def save_render_file(self, widget):

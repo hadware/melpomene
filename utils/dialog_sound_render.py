@@ -41,8 +41,6 @@ class DialogSoundRender():
         for i, filename in enumerate(self.file_list):
             full_dialog += AudioSegment.from_mp3(filename) + silence
 
-        print(self.file_list)
-
         rendered_file_name = self.get_render_path() + hashlib.md5("-".join(self.file_list)).hexdigest() + ".ogg"
         full_dialog.export(rendered_file_name, format="ogg", codec="libvorbis")
         return rendered_file_name

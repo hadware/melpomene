@@ -43,7 +43,6 @@ class DialogParser():
         for line in lines:
             if line != "":
                 splitted = line.split(":", 1)
-                print(splitted)
                 self.dialog.append({"voice" : self.check_voice(splitted[0].strip()),
                                     "text" : splitted[1]})
 
