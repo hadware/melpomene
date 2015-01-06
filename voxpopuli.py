@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'hadware'
 
-from sound_manager import SoundManager
-from parser import DialogParser, VoiceNotFound
-from webclient import WebClient
 from sys import argv
 import os
 import shutil
+
+from utils import *
 
 """This is the main module"""
 
@@ -64,7 +63,7 @@ if __name__ == "__main__":
             sound_files = [client.get_rendered_audio(line["voice"], line["text"]) for line in dialog]
 
             #making the sound manager render the final sound file
-            sound_manager = SoundManager(file_list=sound_files)
+            sound_manager = DialogSoundRender(file_list=sound_files)
             rendered_file = sound_manager.render_dialog()
 
             #copying the rendered file to the cwd

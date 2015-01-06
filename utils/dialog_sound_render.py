@@ -5,7 +5,7 @@ from pydub import AudioSegment
 import hashlib
 import os
 
-class SoundManager():
+class DialogSoundRender():
     """Takes care of tracking sound files, and makes the final completed sound file"""
 
     def __init__(self, file_list = [] , tmp_folder = "/tmp/vox_populi"):

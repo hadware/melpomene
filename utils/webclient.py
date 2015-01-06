@@ -8,6 +8,14 @@ import hashlib
 import os
 from datetime import datetime
 
+class Voice():
+    """Object storing a voice"""
+    def __init__(self, webclient, name, language):
+        self.webclient = webclient
+        self.name = name
+        self.language = language
+
+
 class WebClient():
     """Mainly a class to call when there's something to fetch on the voxygen 'API' """
 
@@ -43,8 +51,9 @@ class WebClient():
 
     def retrieve_voice_list(self):
         """simply retrieves the voice json"""
-        request = self.base_request("voices.json")
-        self.voice_json = json.loads(self.opener.open(request).read())
+        if not hasattr(self, "voice_json"):
+            request = self.base_request("voices.json")
+            self.voice_json = json.loads(self.opener.open(request).read())
 
     def get_voices(self):
         """Retrieve a simple list of all the voices"""
