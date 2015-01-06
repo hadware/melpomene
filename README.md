@@ -1,7 +1,7 @@
 voxpopuli
 =========
 
-Un synthétiseur de texte basé sur le service web de Voxygen (et sur son petit reverse opéré par [tibounise](https://github.com/tibounise/PHP-Voxygen) sur Github et [mGeek](http://mgeek.fr/) sur la toile).
+Un synthétiseur de dialogues basé sur le service web de Voxygen (et sur son petit reverse opéré par [tibounise](https://github.com/tibounise/PHP-Voxygen) sur Github et [mGeek](http://mgeek.fr/) sur la toile). Le fonctionnement est simple: on donne en entrée un dialogue dans lequel plusieurs voix "parlent", et le programme transforme ce dialogue textuel en dialogue audio en utilisant le service de Voxygen (et bientôt d'Acapela).
 
 ## Dépendances
 
