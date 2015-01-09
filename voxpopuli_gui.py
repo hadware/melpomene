@@ -16,7 +16,8 @@ class VoxPopuliMain(Gtk.Window):
 
         #setting up the layout
         self.set_up_layout()
-        
+
+        #once the progressbar has been created we're givin out its reference to the render manager to be able to display progress
         self.render_manager.set_progressbar(self.render_progressbar)
 
         #setting up the sound manager (depending on the slider layout)
