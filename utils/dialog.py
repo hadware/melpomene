@@ -19,7 +19,7 @@ class Cue(object):
     def get_rendered_audio(self, cache_path):
         """retrieve the corresponding soundfile, does not generate it if it already exists"""
         filepath = cache_path + self.get_hash() + ".mp3"
-        if not os.path.isfile(cache_path + self.get_hash() + ".mp3"):
+        if not os.path.isfile(filepath):
             # file hasn't been rendered, we return the existing file name
             self.voice.get_rendered_audio(self.line, filepath)
             self.render_filepath = filepath

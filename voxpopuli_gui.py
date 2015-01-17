@@ -113,11 +113,11 @@ class VoxPopuliMain(Gtk.Window):
 
         if response is not None:
             text_buffer = self.dialog_textarea.get_buffer()
-            text = unicode(text_buffer.get_text(text_buffer.get_start_iter(),
-                                                text_buffer.get_end_iter(),
-                                                False))
+            text = text_buffer.get_text(text_buffer.get_start_iter(),
+                                        text_buffer.get_end_iter(),
+                                        False)
 
-            self.render_manager.file_manager.save_file(unicode(text, "utf-8"), response)
+            self.render_manager.file_manager.save_file(text, response)
 
 
     def save_render_file(self, widget):
