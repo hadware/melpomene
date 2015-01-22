@@ -28,4 +28,7 @@ class Cue(object):
 class Dialog(object):
 
     def __init__(self):
-        self.lines = []
+        self.cues = []
+
+    def add_cue(self, cue):
+        self.cues.append(cue)

@@ -9,6 +9,9 @@ from datetime import datetime
 import lxml.html
 import re
 from voices import Voice
+from string import lower
+class VoiceNotFound(Exception):
+    pass
 
 class ApiClient(object):
     """Base abstract class for all the api clients"""
@@ -148,6 +151,7 @@ class WebClient():
         self.voxygen_client = VoxygenClient(voxygen_domain, tmp_folder)
         self.acapela_client = AcapelaClient(acapela_domain, tmp_folder)
 
+
         #the "head client"  takes care of checking if the tmp_folder exists
         try:
             os.mkdir(self.tmp_folder)
@@ -159,6 +163,10 @@ class WebClient():
         except OSError:
             pass
 
+        #retrieves all the voices, stores them into a dict indexed by their names
+        self.voices = self.voxygen_client.get_voices() + self.acapela_client.get_voices()
+        self.voices_dict = {lower(voice.name) : voice for voice in self.voices}
+
     def get_cache_path(self):
         """Returns the path to the folder where the fragments are stored"""
         return self.tmp_folder + "/audio_fragments/"
@@ -166,7 +174,7 @@ class WebClient():
 
     def get_voices(self):
         """Retrieve a a list of all the voice object instances"""
-        return self.voxygen_client.get_voices() + self.acapela_client.get_voices()
+        return self.voices
 
     def get_voices_grouped_by_langage(self):
         """Groups voices by language lists"""
@@ -175,5 +183,10 @@ class WebClient():
     def get_voice_object_from_name(self, voice):
         """Mainly used by the parser : returns a voice object corresponding to the voice's name, if found
         If it's not able to find a matching voice, returns none"""
-        pass
+        try:
+            return self.voices_dict[voice]
+        except KeyError:
+            raise VoiceNotFound("The voice %s isn't a valid one" % voice)
+
+
 
