@@ -5,7 +5,6 @@ __author__ = 'hadware'
 from sys import argv
 import os
 import shutil
-from gi.repository import Gtk
 
 from utils import *
 
