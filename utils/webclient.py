@@ -70,7 +70,6 @@ class VoxygenClient(ApiClient):
 
         #file hasn't been rendered, we query the API for the file
         #setting get args for the request
-        print(text.encode('utf8'))
         get_args = urllib.urlencode({"method" : "redirect",
                                      "text" : text.encode('utf8'),
                                      "voice" : voice,
@@ -127,22 +126,22 @@ class AcapelaClient(ApiClient):
         """Retrieves a MP3 of the rendered audio, saves it in tmp_folder, returns the filename"""
 
         #finding out the voice's "sonid" needed by acapela
-        voice_sonid = ""
-        for voice in self.voices:
-            if voice["name"] == voice:
-                voice_sonid = voice["sonid"]
+
+        for single_voice_data in self.voices:
+            if single_voice_data["name"] == voice:
+                voice_sonid = single_voice_data["sonid"]
 
         request = self.base_request("demo-tts/DemoHTML5Form_V2_fr.php")
         #can't use the regular urlencode function, it shuffles the arguments' order and the shit acapela sever doesn't like that
         params ="MyLanguages=%s&MySelectedVoice=%s&MyTextForTTS=%s&SendToVaaS=" \
-                % (voice_sonid, voice, urllib.quote_plus(text))
+                % (voice_sonid, voice, urllib.quote(text.encode('utf8')))
         request.add_data(params)
         html = self.opener.open(request).read()
         #to retrieve the url of the rendered MP3, we have to match this line
         #var myPhpVar = \'http://194.158.21.231:8081/MESSAGES/012099097112101108097071114111117112/AcapelaGroup_WebDemo_HTML/sounds/99531273_d8e7295067062.mp3\'
         render_link = self.pattern.findall(html)[0]
 
-        urllib.urlretrieve (render_link, filepath)#dowloading the link, aaand it's done
+        urllib.urlretrieve(render_link, filepath)#dowloading the link, aaand it's done
 
 
 class WebClient():

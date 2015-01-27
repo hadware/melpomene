@@ -6,7 +6,7 @@ from sys import argv
 import os
 import shutil
 from voxpopuli_gui import VoxPopuliMain
-
+from gi.repository import Gtk
 from utils import *
 
 """This is the main module"""

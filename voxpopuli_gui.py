@@ -4,6 +4,7 @@
 from gui import *
 from utils import RenderManager
 from gi.repository import Gtk
+import sys
 
 class VoxPopuliMain(Gtk.Window):
     def __init__(self):
@@ -89,9 +90,9 @@ class VoxPopuliMain(Gtk.Window):
 
     def do_render(self, widget):
         text_buffer = self.dialog_textarea.get_buffer()
-        self.render_manager.render(text_buffer.get_text(text_buffer.get_start_iter(),
+        self.render_manager.render(unicode(text_buffer.get_text(text_buffer.get_start_iter(),
                                                         text_buffer.get_end_iter(),
-                                                        False))
+                                                        False), "utf-8"))
         #reset the player to use the new file
         self.sound_player.reset_player()
 
@@ -131,6 +132,13 @@ class VoxPopuliMain(Gtk.Window):
     def quit(self, widget):
         Gtk.main_quit()
 
+    def load_file_on_start(self, filepath):
+        self.dialog_textbuffer.set_text(self.render_manager.file_manager.open_file(filepath))
+
 if __name__ == "__main__":
     main = VoxPopuliMain()
+    if len(sys.argv) == 3:
+        main.load_file_on_start(sys.argv[2])
+    elif len(sys.argv) == 2:
+        main.load_file_on_start(sys.argv[1])
     Gtk.main()
