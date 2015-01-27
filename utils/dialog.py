@@ -12,7 +12,7 @@ class Cue(object):
     def get_hash(self):
         """Computes the md5 hash for this cue"""
         if not hasattr(self, "hash"):
-            self.hash = hashlib.md5((self.voice.name + self.text).encode('utf8')).hexdigest()
+            self.hash = hashlib.md5((self.voice.name + self.line).encode('utf8')).hexdigest()
         return self.hash
 
 
@@ -22,6 +22,8 @@ class Cue(object):
         if not os.path.isfile(filepath):
             # file hasn't been rendered, we return the existing file name
             self.voice.get_rendered_audio(self.line, filepath)
+            self.render_filepath = filepath
+        else:
             self.render_filepath = filepath
         return self.render_filepath
 

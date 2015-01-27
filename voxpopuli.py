@@ -78,6 +78,6 @@ if __name__ == "__main__":
                 if len(argv) == 3: #if there's a new name argument
                     render_manager.file_manager.save_render(os.getcwd() + "/" + argv[2])
                 else:
-                    render_manager.file_manager.save_render(os.getcwd())
+                    render_manager.file_manager.save_render_in_folder(os.getcwd())
 
 

@@ -13,7 +13,6 @@ class DialogParser():
     def __init__(self, webclient, **kwargs):
         """Constructor"""
         self.webclient = webclient
-        self.voices = kwargs["voices"]
         if "filepath" in kwargs:
             self.load_text_file(kwargs["filepath"])
 

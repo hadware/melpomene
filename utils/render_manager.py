@@ -32,14 +32,14 @@ class RenderManager():
         self.set_progressbar_value(0.0)
 
         # parsing the file into a "dialog" (object reprenseting a list of voices and their lines)
-        self.dialog = self.parser.parse_from_string(unicode(current_text, "utf-8"))
+        self.dialog = self.parser.parse_from_string(current_text)
         self.set_progressbar_value(0.1)
 
         #using the web client to retrieve the rendered sound files
 
         sound_files = []
-        line_render_progress_increment = 0.8 / len(self.dialog)
-        for cue in self.dialog:
+        line_render_progress_increment = 0.8 / len(self.dialog.cues)
+        for cue in self.dialog.cues:
             sound_files.append(cue.get_rendered_audio(self.cache_path + "/audio_fragments/"))
             self.increment_progressbar(line_render_progress_increment)
 

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from gui import *
+from utils import RenderManager
 from gi.repository import Gtk
 
 class VoxPopuliMain(Gtk.Window):

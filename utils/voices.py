@@ -2,7 +2,7 @@ __author__ = 'hadware'
 
 
 class Language():
-        FR, EN, ES, FI, KO, AR, CZ, DE, GR, IT, JP, DN, DU, CA = range(13)
+        FR, EN, ES, FI, KO, AR, CZ, DE, GR, IT, JP, DN, DU, CA = range(14)
 
 class Voice():
     """A voice "reference", containing metadata about the voice, and its webclient"""
@@ -15,6 +15,6 @@ class Voice():
             self.description = description
 
     def get_rendered_audio(self, text, filepath):
-        self.webclient.get_rendered_audio(text, self.name, filepath)
+        self.webclient.get_rendered_audio(text=text, voice=self.name, filepath=filepath)
 
 

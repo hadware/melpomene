@@ -61,7 +61,7 @@ class VoxygenClient(ApiClient):
             self.voice_json = json.loads(self.opener.open(request).read())
             self.voices = []
             for language_entry in self.voice_json["groups"]:
-                self.voices += [{"name" : voice["name"],
+                self.voices += [{"name" : voice["name"].encode("ascii", "ignore"),
                                  "language" : language_entry["name"],
                                  "example" : voice["text"]} for voice in language_entry["voices"]]
 
@@ -70,6 +70,7 @@ class VoxygenClient(ApiClient):
 
         #file hasn't been rendered, we query the API for the file
         #setting get args for the request
+        print(text.encode('utf8'))
         get_args = urllib.urlencode({"method" : "redirect",
                                      "text" : text.encode('utf8'),
                                      "voice" : voice,
@@ -105,19 +106,21 @@ class AcapelaClient(ApiClient):
             voices_groups_html = self.form_html.cssselect("fieldset")[1].cssselect("select")
             self.languages = dict()
             for language in languages_html:
+
                 self.languages[language.get("value")]= {"language" : language.text.strip(),
                                                         "voices": list()}
+
             #voices are grouped by language
             for voice_group in voices_groups_html:
                 for voice in voice_group.cssselect("option"):
-                    self.languages[voice_group.get("value")]["voices"].append(voice.get("value"))
+                    self.languages[voice_group.get("id")]["voices"].append(voice.get("value"))
 
             #voices grouped in a list
             self.voices = []
             for sonid in self.languages:
                 for voice in self.languages[sonid]["voices"]:
                     self.voices.append({"name" : voice,
-                                        "language" : self.languages[sonid]["name"],
+                                        "language" : self.languages[sonid]["language"],
                                         "sonid" : sonid})
 
     def get_rendered_audio(self, voice, text, filepath):
@@ -184,7 +187,7 @@ class WebClient():
         """Mainly used by the parser : returns a voice object corresponding to the voice's name, if found
         If it's not able to find a matching voice, returns none"""
         try:
-            return self.voices_dict[voice]
+            return self.voices_dict[lower(voice).strip()]
         except KeyError:
             raise VoiceNotFound("The voice %s isn't a valid one" % voice)
 

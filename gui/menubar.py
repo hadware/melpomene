@@ -35,6 +35,7 @@ class VoxPopuliMenu():
 
         #creating the UI manager
         self.ui_manager = Gtk.UIManager()
+        self.ui_manager.add_ui_from_string(UI_INFO)
         self.ui_manager.insert_action_group(self.action_group)
         self.menubar = self.ui_manager.get_widget("/MenuBar")
 
@@ -46,10 +47,11 @@ class VoxPopuliMenu():
         self.action_save_render = Gtk.Action("FileSaveRenderAs", "Sauver le rendu", "Sauvegarder le fichier son du dialogue", None)
         self.action_quit= Gtk.Action("FileQuit", "Quitter", None, None)
 
+        for action in [self.action_filemenu, self.action_new_file, self.action_open_file, self.action_save_text, self.action_save_render, self.action_quit]:
+            self.action_group.add_action(action)
 
     def set_up_edit_actions(self):
         self.action_group.add_action(Gtk.Action("EditMenu", "Editer", None, None))
-        self.action_group.add_action(Gtk.Action("EditShowAvailableVoices", "Voix disponibles", None, None))
         self.action_render = Gtk.Action("EditRender", "Rendu", "Faire un rendu sonore du dialogue")
 
         self.action_group.add_action(self.action_render)
