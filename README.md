@@ -19,10 +19,10 @@ Pydub nécessite ffmpeg (ou avconv pour ceux qui sont dans le vent). On l'instal
 
 ## Fonctionnement
 
-On utilise le script en CLI, les paramètres sont le texte d'entrée (un dialogue), et le nom du fichier de sortie.
+On utilise le script en CLI ou avec une GUI GTK3+, les paramètres sont le texte d'entrée (un dialogue), et le nom du fichier de sortie.
 La commande est donc de la forme
 
-    ./voxpopuli FILE [OUTPUT FILE] | --voices
+    ./voxpopuli FILE [OUTPUT FILE] | --voices | --gui
 
 Soit donc par exemple
 
