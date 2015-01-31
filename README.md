@@ -1,7 +1,7 @@
 voxpopuli
 =========
 
-Un synthétiseur de dialogues basé sur le service web de Voxygen (et sur son petit reverse opéré par [tibounise](https://github.com/tibounise/PHP-Voxygen) sur Github et [mGeek](http://mgeek.fr/) sur la toile). Le fonctionnement est simple: on donne en entrée un dialogue dans lequel plusieurs voix "parlent", et le programme transforme ce dialogue textuel en dialogue audio en utilisant le service de Voxygen (et bientôt d'Acapela).
+Un synthétiseur de dialogues. Le fonctionnement est simple: on donne en entrée un dialogue dans lequel plusieurs voix "parlent", et le programme transforme ce dialogue textuel en dialogue audio en utilisant les serices web de Voxygen et Acapela. Merci à [tibounise](https://github.com/tibounise/PHP-Voxygen) sur Github et [mGeek](http://mgeek.fr/) sur la toile) pour leur reverse de Voxygen duquel je me suis inspiré.
 
 ## Dépendances
 
@@ -47,14 +47,20 @@ Aller, un petit exemple de dialogue pour voir:
     Yeti : Salut titi!
     Zozo : Mais fermez vos putains de gueule bordel
 
-(Notez que certains mots sont censurés par le service, mais que je ne tarderai pas à implémenter le fameux Grommofilter de tibounise)
+(Notez que certains mots sont censurés par le service Voxygen, mais que je ne tarderai pas à implémenter le fameux Grommofilter de tibounise)
 
 ## Notes Légales (lol)
+
+### Voxygen
 L'utilisation de voxpopuli doit se faire uniquement dans le but d'évaluer les services proposés par [Voxygen SAS](http://voxygen.fr), conformément aux [mentions légales](http://voxygen.fr/fr/content/mentions-legales) du démonstrateur de Voxygen.
 
-Les fichiers audio produits par Voxygen SAS sont protégés par le droit d'auteur, et ne doivent pas être diffusés sans l'autorisation de Voxygen SAS.
+Les fichiers audio produits par Voxygen SAS sont protégés par des droits d'auteur, et ne doivent pas être diffusés sans l'autorisation de Voxygen SAS.
 
 Voxpopuli a été développé en toute indépendance de Voxygen SAS, et n'est pas affilié à Voxygen SAS.
 
-*Toutes ressemblances de ces notes à celles de PHP-voxygen sont fortuites.*
+### Acapela
+L'utilisation de voxpopuli doit se faire uniquement dans le but d'évaluer les services proposés par [Acapela Group](http://acapela-group.com/), conformément aux [mentions légales](http://www.acapela-group.com/company/sample-page/?lang=fr) du démonstrateur d'Acapela.
 
+Les fichiers audio produits par Acapela sont protégés par des droits d'auteur, et ne doivent pas être diffusés sans l'autorisation de Acapela Group.
+
+Voxpopuli a été développé en toute indépendance d'Acapela Group, et n'est pas affilié à Acapela Group.
