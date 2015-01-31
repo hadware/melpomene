@@ -19,6 +19,9 @@ UI_INFO = """
         <menu action='EditMenu'>
             <menuitem action='EditRender' />
         </menu>
+        <menu action='HelpMenu'>
+            <menuitem action='About' />
+        </menu>
     </menubar>
 </ui>
 """
@@ -32,6 +35,7 @@ class VoxPopuliMenu():
         self.action_group = Gtk.ActionGroup("menu_actions")
         self.set_up_file_actions()
         self.set_up_edit_actions()
+        self.set_up_help_actions()
 
         #creating the UI manager
         self.ui_manager = Gtk.UIManager()
@@ -47,7 +51,9 @@ class VoxPopuliMenu():
         self.action_save_render = Gtk.Action("FileSaveRenderAs", "Sauver le rendu", "Sauvegarder le fichier son du dialogue", None)
         self.action_quit= Gtk.Action("FileQuit", "Quitter", None, None)
 
-        for action in [self.action_filemenu, self.action_new_file, self.action_open_file, self.action_save_text, self.action_save_render, self.action_quit]:
+
+        for action in [self.action_filemenu, self.action_new_file, self.action_open_file, self.action_save_text,
+                       self.action_save_render, self.action_quit]:
             self.action_group.add_action(action)
 
     def set_up_edit_actions(self):
@@ -56,4 +62,8 @@ class VoxPopuliMenu():
 
         self.action_group.add_action(self.action_render)
 
+    def set_up_help_actions(self):
+        self.action_group.add_action(Gtk.Action("HelpMenu", "Aide", None, None))
+        self.action_about= Gtk.Action("About", "A propos", None, None)
+        self.action_group.add_action(self.action_about)
 

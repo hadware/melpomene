@@ -84,6 +84,7 @@ class VoxPopuliMain(Gtk.Window):
         self.voxpopuli_menu.action_save_text.connect("activate", self.save_text_file)
         self.voxpopuli_menu.action_save_render.connect("activate", self.save_render_file)
         self.voxpopuli_menu.action_render.connect("activate", self.do_render)
+        self.voxpopuli_menu.action_about.connect("activate", self.display_about)
 
         #window destruction
         self.connect("destroy", self.quit)
@@ -131,6 +132,11 @@ class VoxPopuliMain(Gtk.Window):
 
     def quit(self, widget):
         Gtk.main_quit()
+
+    def display_about(self, widget):
+        dialog = AboutDialog(self)
+        dialog.run()
+        dialog.destroy()
 
     def load_file_on_start(self, filepath):
         self.dialog_textbuffer.set_text(self.render_manager.file_manager.open_file(filepath))
