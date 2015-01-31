@@ -18,9 +18,6 @@ UI_INFO = """
         </menu>
         <menu action='EditMenu'>
             <menuitem action='EditRender' />
-            <menu action='EditShowAvailableVoices'>
-                %s
-            </menu>
         </menu>
     </menubar>
 </ui>
@@ -33,20 +30,14 @@ class VoxPopuliMenu():
 
         #creating menu actions
         self.action_group = Gtk.ActionGroup("menu_actions")
-        self.render_ui_voicelist(voice_list)
         self.set_up_file_actions()
         self.set_up_edit_actions()
 
         #creating the UI manager
         self.ui_manager = Gtk.UIManager()
-        self.ui_manager.add_ui_from_string(UI_INFO % "\n".join(["<menuitem action='%s' />" % voice["menuitem"] for voice in self.voice_menuitems]))
+        self.ui_manager.add_ui_from_string(UI_INFO)
         self.ui_manager.insert_action_group(self.action_group)
         self.menubar = self.ui_manager.get_widget("/MenuBar")
-
-
-    def render_ui_voicelist(self, voice_list):
-
-        self.voice_menuitems = [{"menuitem" : "Voice%s" % voice.title(), "name" :  voice.title()}  for voice in voice_list]
 
     def set_up_file_actions(self):
         self.action_filemenu = Gtk.Action("FileMenu", "Fichier", None, None)
@@ -61,10 +52,7 @@ class VoxPopuliMenu():
 
     def set_up_edit_actions(self):
         self.action_group.add_action(Gtk.Action("EditMenu", "Editer", None, None))
-        self.action_group.add_action(Gtk.Action("EditShowAvailableVoices", "Voix disponibles", None, None))
         self.action_render = Gtk.Action("EditRender", "Rendu", "Faire un rendu sonore du dialogue")
-
-        self.action_group.add_actions([(voice["menuitem"], None, voice["name"], None) for voice in self.voice_menuitems])
 
         self.action_group.add_action(self.action_render)
 

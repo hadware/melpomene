@@ -5,7 +5,8 @@ __author__ = 'hadware'
 from sys import argv
 import os
 import shutil
-
+from voxpopuli_gui import VoxPopuliMain
+from gi.repository import Gtk
 from utils import *
 
 """This is the main module"""
@@ -14,6 +15,13 @@ def print_help():
     """Prints out the help"""
     print('''
     Utilisation : ./voxpopuli dialogue.txt rendu.ogg
+
+    Pour utiliser l'interface graphique:
+        ./voxpopuli --gui
+
+            ou
+
+        ./voxpopuli_gui
 
     Pour afficher les voix disponibles :
         ./voxpopuli --voices
@@ -32,44 +40,44 @@ def print_help():
             ''')
 
 if __name__ == "__main__":
-    #creating the web client
-    client = WebClient()
 
     #affichage de l'aide
     if len(argv) == 1:
         print_help()
 
-    elif argv[1] in ["help", "-h", "--help", "-help"]:
+    elif argv[1] in ["help", "-h", "--help", "-help", "A L'AIDE", "HIFLE", "AYUDA"]:
         print_help()
 
     elif argv[1] == "--voices":
-        voices_list = client.get_full_voices()
-        for langage_group in voices_list:
-            print("Langue : %s" % langage_group["language"])
-            for voice in langage_group["voices"]:
+        #creating the web client
+        client = WebClient()
+        voices_list = client.get_voices_grouped_by_langage()
+        for language_index in voices_list:
+            print("Langue : %s" % voices_list[language_index]["name"])
+            for voice in voices_list[language_index]["voices"]:
                 print("\t - %s" % voice)
+
+    elif argv[1] == "--gui":
+        # gui requested
+        main = VoxPopuliMain()
+        Gtk.main()
+
     else:
-        #retrieving the available voice list and giving it to the parser constructor
-        parser = DialogParser(voices = client.get_voices())
+        render_manager = RenderManager()
 
-        #parsing the file into a "dialog" (list of voices and their lines)
-        try:
-            dialog = parser.parse_from_file(os.path.abspath(argv[1]))
+        with open(os.path.abspath(argv[1]), mode = "r+") as text_file:
+            text = unicode(text_file.read(), "utf-8")
 
-        except VoiceNotFound:
-            print("Les voix ne sont pas les bonnes! Utilise l'option --voices pour afficher les voix disponibles.")
-        else:
-            #using the web client to retrieve the rendered sound files
-            sound_files = [client.get_rendered_audio(line["voice"], line["text"]) for line in dialog]
-
-            #making the sound manager render the final sound file
-            sound_manager = DialogSoundRender(file_list=sound_files)
-            rendered_file = sound_manager.render_dialog()
-
-            #copying the rendered file to the cwd
-            if len(argv) == 3: #if there's a new name argument
-                shutil.copyfile(rendered_file, os.getcwd() + "/" + argv[2])
+            try:
+                render_manager.render(text)
+            except VoiceNotFound:
+                print("Les voix ne sont pas les bonnes! Utilise l'option --voices pour afficher les voix disponibles.")
             else:
-                shutil.copyfile(rendered_file, os.getcwd())
+
+                #copying the rendered file to the cwd
+                if len(argv) == 3: #if there's a new name argument
+                    render_manager.file_manager.save_render(os.getcwd() + "/" + argv[2])
+                else:
+                    render_manager.file_manager.save_render_in_folder(os.getcwd())
 
 

@@ -1,4 +1,5 @@
 __author__ = 'hadware'
 from dialog_sound_render import DialogSoundRender
-from parser import DialogParser, VoiceNotFound
-from webclient import WebClient
+from parser import DialogParser
+from webclient import WebClient, VoiceNotFound
+from render_manager import RenderManager

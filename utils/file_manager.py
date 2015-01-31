@@ -34,6 +34,10 @@ class VoxPopuliFileManager():
         #copying the rendered file to the specified filepath
         shutil.copyfile(self.render_file_path, filepath)
 
+    def save_render_in_folder(self, folder):
+        #copying the rendered file to the specified folder, using the current basename
+        shutil.copyfile(self.render_file_path, folder + os.path.basename(self.render_file_path))
+
     def add_filter(self, dialog, mime_type, name):
         """Adds a filter to dialog"""
         filter = Gtk.FileFilter()
