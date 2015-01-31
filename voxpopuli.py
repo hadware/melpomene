@@ -51,10 +51,10 @@ if __name__ == "__main__":
     elif argv[1] == "--voices":
         #creating the web client
         client = WebClient()
-        voices_list = client.get_full_voices()
-        for langage_group in voices_list:
-            print("Langue : %s" % langage_group["language"])
-            for voice in langage_group["voices"]:
+        voices_list = client.get_voices_grouped_by_langage()
+        for language_index in voices_list:
+            print("Langue : %s" % voices_list[language_index]["name"])
+            for voice in voices_list[language_index]["voices"]:
                 print("\t - %s" % voice)
 
     elif argv[1] == "--gui":
