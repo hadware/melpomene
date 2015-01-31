@@ -29,10 +29,11 @@ Soit donc par exemple
 
     ./voxpopuli texte.txt rendu.ogg
 
-Nota Bene:
+Notes:
  * Le rendu sonore est pour l'instant uniquement exportable en OGG avec codec vorbis.
  * Si le fichier de sortie n'est pas spécifié, c'est un fichier avec un nom en hash MD5 qui est copié.
  * l'option --voices (passée seule en paramètre) permet de voir les voix disponibles
+ * L'interface graphique nécessite GTK3+ et Gstreamer1.0. A priori pour un ubuntu ou un environnement gnome assez récent, ça devrait déjà être là. Pour le reste, inch'allah.
 
 Si vous avez lu jusqu'ici, c'est probablement que vous voulez savoir comment on formatte un dialogue pour le programme. C'est très simple: on spécifie une voix, puis la ligne qu'elle devra "lire". Par exemple:
 
