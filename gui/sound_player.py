@@ -8,7 +8,18 @@ import os
 class SoundPlayerError(Exception):
     pass
 
-class SoundPlayer():
+class VoiceTestSoundPlayer(object):
+    """A very simple sound player, to try out a voice """
+
+    def __init__(self):
+        self.playbin = Gst.ElementFactory.make("playbin", "player")
+        Gst.init()
+
+    def play_file(self, filepath):
+        self.playbin.set_property('uri', 'file://'+os.path.abspath(filepath))
+        self.playbin.set_state(Gst.State.PLAYING)
+
+class RenderSoundPlayer(object):
     """Takes care of playing the rendered dialog"""
 
     def __init__(self, file_manager, slider):

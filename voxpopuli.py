@@ -51,7 +51,7 @@ if __name__ == "__main__":
     elif argv[1] == "--voices":
         #creating the web client
         client = WebClient()
-        voices_list = client.get_voices_grouped_by_langage()
+        voices_list = client.get_voices_grouped_by_language()
         for language_index in voices_list:
             print("Langue : %s" % voices_list[language_index]["name"])
             for voice in voices_list[language_index]["voices"]:

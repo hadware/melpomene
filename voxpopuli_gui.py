@@ -23,7 +23,7 @@ class VoxPopuliMain(Gtk.Window):
         self.render_manager.set_progressbar(self.render_progressbar)
 
         #setting up the sound manager (depending on the slider layout)
-        self.sound_player = SoundPlayer(self.render_manager.file_manager, self.sound_progress_scale)
+        self.sound_player = RenderSoundPlayer(self.render_manager.file_manager, self.sound_progress_scale)
 
         #setting up signal connections
         self.set_up_signals()

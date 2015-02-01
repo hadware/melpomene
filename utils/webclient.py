@@ -203,7 +203,7 @@ class WebClient():
         """Retrieve a a list of all the voice object instances"""
         return self.voices
 
-    def get_voices_grouped_by_langage(self):
+    def get_voices_grouped_by_language(self):
         """Groups voices by language lists"""
         voices_dict = {i : {"name" : Language.get_language_name(i),
                             "voices" : list()} for i in range(Language.language_count)}

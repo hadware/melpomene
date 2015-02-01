@@ -26,7 +26,7 @@ UI_INFO = """
 </ui>
 """
 
-class VoxPopuliMenu():
+class VoxPopuliMenu(object):
 
     def __init__(self, voice_list):
         """Uses the XML description to render a menubar"""
