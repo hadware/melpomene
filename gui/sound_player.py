@@ -12,8 +12,8 @@ class VoiceTestSoundPlayer(object):
     """A very simple sound player, to try out a voice """
 
     def __init__(self):
-        self.playbin = Gst.ElementFactory.make("playbin", "player")
         Gst.init()
+        self.playbin = Gst.ElementFactory.make("playbin", "player")
 
     def play_file(self, filepath):
         self.playbin.set_property('uri', 'file://'+os.path.abspath(filepath))

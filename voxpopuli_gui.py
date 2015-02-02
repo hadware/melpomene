@@ -11,6 +11,7 @@ class VoxPopuliMain(Gtk.Window):
         super(VoxPopuliMain, self).__init__()
 
         self.set_title("VoxPopuli")
+        #self.set_size_request(800, 500)
         self.connect("destroy", Gtk.main_quit)
 
         #initilizing the render manager
@@ -36,9 +37,10 @@ class VoxPopuliMain(Gtk.Window):
         ### the layout
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.box)
-        self.grid = Gtk.Table(12, 6, True)
-        self.grid.set_row_spacing(2, 10)
-        self.box.pack_end(self.grid, False, False, 0)
+        self.grid = Gtk.Grid()
+        self.grid.set_column_homogeneous(True)
+        self.grid.set_row_homogeneous(True)
+        self.box.pack_end(self.grid, True, True, 0)
 
         #rendering and adding the menu
         self.voxpopuli_menu = VoxPopuliMenu(self.render_manager.webclient.get_voices())
@@ -59,15 +61,18 @@ class VoxPopuliMain(Gtk.Window):
         self.sound_progress_scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0.0, 100.0, 0.5)
         self.sound_progress_scale.set_digits(2)
         self.sound_progress_scale.set_draw_value(False)
+        #right-side voice list and voice test panel
+        self.voice_list_panel = VoiceList(self.render_manager.webclient)
 
         ### adding the elements to the grid layout
-        self.grid.attach(self.button_render, 1, 2, 0, 1)
-        self.grid.attach(self.render_progressbar, 0, 3, 1, 2)
-        self.grid.attach(self.button_play, 3, 4, 0, 1)
-        self.grid.attach(self.button_pause, 4, 5, 0, 1)
-        self.grid.attach(self.sound_progress_scale, 3, 6, 1, 2)
-        self.grid.attach(self.textarea_scrollwindow, 0, 6, 2, 12)
+        self.grid.attach(self.button_render, 1, 0, 1, 1)
+        self.grid.attach(self.render_progressbar, 0, 1, 3, 1)
+        self.grid.attach(self.button_play, 3, 0, 1, 1)
+        self.grid.attach(self.button_pause, 4, 0, 1, 1)
+        self.grid.attach(self.sound_progress_scale, 3, 1, 3, 1)
+        self.grid.attach(self.textarea_scrollwindow, 0, 2, 6, 12)
         self.textarea_scrollwindow.add(self.dialog_textarea)
+        self.grid.attach(self.voice_list_panel, 6, 0, 2, 14)
 
     def set_up_signals(self):
         #render button
