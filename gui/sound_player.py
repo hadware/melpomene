@@ -16,6 +16,7 @@ class VoiceTestSoundPlayer(object):
         self.playbin = Gst.ElementFactory.make("playbin", "player")
 
     def play_file(self, filepath):
+        self.playbin.set_state(Gst.State.READY)
         self.playbin.set_property('uri', 'file://'+os.path.abspath(filepath))
         self.playbin.set_state(Gst.State.PLAYING)
 
