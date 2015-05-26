@@ -86,6 +86,6 @@ class VoiceList(Gtk.Grid):
         model, iter = self.voice_treelist.get_selection().get_selected()
         if iter is not None:
             selected_voice = self.webclient.get_voice_object_from_name(model[iter][2])
-            test_cue = Cue(selected_voice, self.test_textarea.get_text())
+            test_cue = Cue(selected_voice, unicode(self.test_textarea.get_text(),"utf-8"))
             rendered_test_filepath = test_cue.get_rendered_audio(self.webclient.get_cache_path())
             self.test_sound_player.play_file(rendered_test_filepath)

@@ -208,7 +208,8 @@ class WebClient():
         voices_dict = {i : {"name" : Language.get_language_name(i),
                             "voices" : list()} for i in range(Language.language_count)}
         for voice in self.voices:
-            voices_dict[voice.language]["voices"].append(voice)
+            if voice.language is not None:
+                voices_dict[voice.language]["voices"].append(voice)
 
         return voices_dict
 
