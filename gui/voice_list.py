@@ -24,7 +24,7 @@ class VoiceList(Gtk.Grid):
         voices_list = self.webclient.get_voices_grouped_by_language()
         for language_index in voices_list:
             for voice in voices_list[language_index]["voices"]:
-                self.voice_store.append([voice.name + " (%s)" % voice.webclient.name, voice.language, voice.name])
+                self.voice_store.append([voice.name + " (%s)" % voice.webclient.client_name, voice.language, voice.name])
                 if not voice.language in languages_list:
                     languages_list.append(voice.language)
                     language_store.append([Language.get_language_name(voice.language), voice.language])

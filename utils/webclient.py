@@ -16,6 +16,7 @@ class VoiceNotFound(Exception):
 
 class ApiClient(object):
     """Base abstract class for all the api clients"""
+    client_name =""
     def __init__(self, domain, tmp_folder):
         self.domain = domain
         self.tmp_folder = tmp_folder
@@ -48,14 +49,19 @@ class ApiClient(object):
             #gathering all the voice names and leaving out the rest
             self.voice_objects = []
             for voice in self.voices:
-                self.voice_objects.append(Voice(voice["name"], self._get_language_code(voice["language"]), self))
+                #this try clause is there in case a voice has been added, but isn't yet associated to a language
+                try:
+                    self.voice_objects.append(Voice(voice["name"], self._get_language_code(voice["language"]), self))
+                except KeyError:
+                    print("Voice of language code %s has been added to %s and is not yet supported"
+                          % (voice["language"], self.client_name))
 
         return self.voice_objects
 
 class VoxygenClient(ApiClient):
     """Class whose job will be to interact with the Voxygen API"""
-    _language_codes = {"fr": Language.FR, "en" : Language.EN, "ar" : Language.AR, "it" : Language.IT, "es" : Language.ES}
-    name = "Voxygen"
+    _language_codes = {"fr": Language.FR, "de": Language.DE, "en" : Language.EN, "ar" : Language.AR, "it" : Language.IT, "es" : Language.ES, "en-US": Language.EN, "en-UK": Language.EN}
+    client_name = "Voxygen"
 
     def _base_request(self, path):
         """Builds a base request for the voxygen api, mimicking a FF browser"""
@@ -103,10 +109,11 @@ class AcapelaClient(ApiClient):
                           u"Portuguese": Language.PT, u"Russian": Language.RU, u"Spanish": Language.ES, u"Swedish": Language.SW,
                           u"Turkish": Language.TU}
 
-    name = "Acapela"
+    client_name = "Acapela"
     def __init__(self, domain, tmp_folder):
         super(AcapelaClient, self).__init__(domain, tmp_folder)
-        self.pattern = re.compile(r"http://.*.mp3") #storing the compiled regular expression
+        #storing the compiled regular expression used to find the mp3 file's link in the javascript code
+        self.pattern = re.compile(r"http://.*.mp3")
 
     def _base_request(self, path):
         """Builds a base request for the voxygen api, mimicking a FF browser"""
@@ -119,9 +126,10 @@ class AcapelaClient(ApiClient):
         for language in self._acapela_languages:
             if language_string.find(language) != -1:
                 return self._acapela_languages[language]
+        raise KeyError #raised if no language is found
 
     def _retrieve_voice_list(self):
-        """simply retrieves the voice json"""
+        """simply retrieves the json listing all available voices for the site's Javascript module"""
         if not hasattr(self, "form_html"):
             request = self._base_request("demo-tts/DemoHTML5Form_V2_fr.php")
             html_file = self.opener.open(request).read()
@@ -131,8 +139,8 @@ class AcapelaClient(ApiClient):
             self.languages = dict()
             for language in languages_html:
 
-                self.languages[language.get("value")]= {"language" : language.text.strip(),
-                                                        "voices": list()}
+                self.languages[language.get("value")] = {"language": language.text.strip(),
+                                                         "voices": list()}
 
             #voices are grouped by language
             for voice_group in voices_groups_html:
@@ -148,7 +156,7 @@ class AcapelaClient(ApiClient):
                                         "sonid" : sonid})
 
     def get_rendered_audio(self, voice, text, filepath):
-        """Retrieves a MP3 of the rendered audio, saves it in tmp_folder, returns the filename"""
+        """Retrieves a MP3 of the rendered audio, saves it in tmp_folder"""
 
         #finding out the voice's "sonid" needed by acapela
         voice_sonid=""
@@ -157,12 +165,12 @@ class AcapelaClient(ApiClient):
                 voice_sonid = single_voice_data["sonid"]
 
         request = self._base_request("demo-tts/DemoHTML5Form_V2_fr.php")
-        #can't use the regular urlencode function, it shuffles the arguments' order and the shit acapela sever doesn't like that
+        #can't use the regular urlencode function, it shuffles the arguments' order and the shit acapela server doesn't like that
         params ="MyLanguages=%s&MySelectedVoice=%s&MyTextForTTS=%s&SendToVaaS=" \
                 % (voice_sonid, voice, urllib.quote(text.encode('utf8')))
         request.add_data(params)
         html = self.opener.open(request).read()
-        #to retrieve the url of the rendered MP3, we have to match this line
+        #to retrieve the url of the rendered MP3, we have to match this kind of line
         #var myPhpVar = \'http://194.158.21.231:8081/MESSAGES/012099097112101108097071114111117112/AcapelaGroup_WebDemo_HTML/sounds/99531273_d8e7295067062.mp3\'
         render_link = self.pattern.findall(html)[0]
 
