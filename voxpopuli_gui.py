@@ -4,6 +4,7 @@
 from gui import *
 from utils import RenderManager
 from gi.repository import Gtk
+from utils.webclient import VoiceNotFound
 import sys
 
 class VoxPopuliMain(Gtk.Window):
@@ -96,12 +97,14 @@ class VoxPopuliMain(Gtk.Window):
 
     def do_render(self, widget):
         text_buffer = self.dialog_textarea.get_buffer()
-        self.render_manager.render(unicode(text_buffer.get_text(text_buffer.get_start_iter(),
-                                                        text_buffer.get_end_iter(),
-                                                        False), "utf-8"))
-        #reset the player to use the new file
-        self.sound_player.reset_player()
-
+        try:
+            self.render_manager.render(unicode(text_buffer.get_text(text_buffer.get_start_iter(),
+                                                            text_buffer.get_end_iter(),
+                                                            False), "utf-8"))
+            #reset the player to use the new file
+            self.sound_player.reset_player()
+        except VoiceNotFound as exp:
+            print(exp.message)
 
     def open_text_file(self, widget):
         """Ask the user, via a dialog, to open a text file, update the text buffer with the text"""
@@ -148,6 +151,7 @@ class VoxPopuliMain(Gtk.Window):
 
 if __name__ == "__main__":
     main = VoxPopuliMain()
+    # loading the text file directly if it's passed as an argument
     if len(sys.argv) == 3:
         main.load_file_on_start(sys.argv[2])
     elif len(sys.argv) == 2:

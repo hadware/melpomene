@@ -41,7 +41,7 @@ class DialogParser():
             voice_defs = match_obj.groups()[0].split(",")
             character_dict = dict()
             for voice_def in voice_defs:
-                character, voice = tuple([string.strip() for string in voice_defs.split(":")])
+                character, voice = tuple([string.strip() for string in voice_def.split(":")])
                 character_dict[character.upper()] = self.webclient.get_voice_object_from_name(voice)
 
             #then parsing the dialog using both the defined characters and the regular voices
