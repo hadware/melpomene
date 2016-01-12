@@ -27,7 +27,7 @@ class DialogSoundRender():
         return self.tmp_folder + "/audio_fragments/"
 
     def get_render_path(self):
-        """returns the foder where the rendered files are stored"""
+        """returns the folder where the rendered files are stored"""
         return self.tmp_folder + "/renders/"
 
     def render_dialog(self, file_list = None):

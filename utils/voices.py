@@ -16,5 +16,5 @@ class Voice(object):
         self.webclient.get_rendered_audio(text=text, voice=self.name, filepath=filepath)
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.webclient.name)
+        return "%s (%s)" % (self.name, self.webclient.client_name)
 

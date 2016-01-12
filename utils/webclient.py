@@ -128,8 +128,19 @@ class AcapelaClient(ApiClient):
                 return self._acapela_languages[language]
         raise KeyError #raised if no language is found
 
+
+
     def _retrieve_voice_list(self):
         """simply retrieves the json listing all available voices for the site's Javascript module"""
+
+        def remove_emotive_string(voice_name):
+            """Helper function to remove the 'emotive voice' crap from the voice names"""
+            splitted = voice_name.split(" ")
+            if len(splitted) > 1:
+                return splitted[0]
+            else:
+                return voice_name
+
         if not hasattr(self, "form_html"):
             request = self._base_request("demo-tts/DemoHTML5Form_V2_fr.php")
             html_file = self.opener.open(request).read()
@@ -151,7 +162,7 @@ class AcapelaClient(ApiClient):
             self.voices = []
             for sonid in self.languages:
                 for voice in self.languages[sonid]["voices"]:
-                    self.voices.append({"name" : voice,
+                    self.voices.append({"name" : remove_emotive_string(voice),
                                         "language" : self.languages[sonid]["language"],
                                         "sonid" : sonid})
 
