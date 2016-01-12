@@ -11,6 +11,9 @@ import re
 from voices import Voice
 from locales import Language
 from string import lower
+
+SCRIPT_FOLDER_PATH =
+
 class VoiceNotFound(Exception):
     pass
 
@@ -30,7 +33,7 @@ class ApiClient(object):
         pass
 
     def _build_url(self, path):
-        """Just builds an url based on the gven path"""
+        """Just builds an url based on the given path"""
         return "http://" + self.domain + "/" + path
 
     def _retrieve_voice_list(self):
@@ -131,7 +134,7 @@ class AcapelaClient(ApiClient):
 
 
     def _retrieve_voice_list(self):
-        """simply retrieves the json listing all available voices for the site's Javascript module"""
+        """simply retrieves the json listing all available voices for the site's HTML or ajax call module"""
 
         def remove_emotive_string(voice_name):
             """Helper function to remove the 'emotive voice' crap from the voice names"""
@@ -213,6 +216,18 @@ class WebClient():
         self.voices = self.voxygen_client.get_voices() + self.acapela_client.get_voices()
         self.voices_dict = {lower(voice.name) : voice for voice in self.voices}
 
+    def _update_voices_cache_file(self, clients_list):
+        """Creates (or overwrites) a json file storing the voices retrieved from the API"""
+        voices_dict = {client.client_name : [] for client in clients_list]}
+        for voice in self.voices:
+            voices_dict[voice.webclient.client_name].append(voice.to_dict())
+
+        return voices_dict
+
+    def _load_voices_from_cache(self):
+        """Creates the voice dict using the voice cache json file"""
+        pass
+
     def get_cache_path(self):
         """Returns the path to the folder where the fragments are stored"""
         return self.tmp_folder + "/audio_fragments/"
@@ -221,6 +236,7 @@ class WebClient():
     def get_voices(self):
         """Retrieve a a list of all the voice object instances"""
         return self.voices
+
 
     def get_voices_grouped_by_language(self):
         """Groups voices by language lists"""

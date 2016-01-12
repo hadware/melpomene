@@ -18,3 +18,7 @@ class Voice(object):
     def __str__(self):
         return "%s (%s)" % (self.name, self.webclient.client_name)
 
+    def to_dict(self):
+        return {"name" : self.name,
+                "language" : self.language.get_language_code(self.language)}
+

@@ -13,3 +13,9 @@ class Language(object):
     @classmethod
     def get_language_name(cls, language_code):
         return cls.language_names[language_code]
+
+    @classmethod
+    def get_language_code(cls, language_name):
+        """Returns the langage code for the given language name"""
+        # this is dirty, very dirty.
+        return cls.language_names.index(language_name)
