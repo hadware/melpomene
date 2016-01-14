@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import logging
+from itertools import chain
+from os.path import join
 
 __author__ = 'hadware'
 
@@ -12,9 +15,16 @@ from voices import Voice
 from locales import Language
 from string import lower
 
-SCRIPT_FOLDER_PATH =
+SCRIPT_FOLDER_PATH = join(os.path.dirname(__file__), "../")
+CACHE_FILE_NAME = "voices_cache.json"
 
 class VoiceNotFound(Exception):
+
+    def __init__(self, wrong_voice_name, **kwargs):
+        super(VoiceNotFound, self).__init__(**kwargs)
+        self.wrong_voice_name = wrong_voice_name
+
+class NoCacheFile(Exception):
     pass
 
 class ApiClient(object):
@@ -199,7 +209,7 @@ class WebClient():
         self.tmp_folder = tmp_folder
         self.voxygen_client = VoxygenClient(voxygen_domain, tmp_folder)
         self.acapela_client = AcapelaClient(acapela_domain, tmp_folder)
-
+        self.api_clients = [self.acapela_client, self.voxygen_client]
 
         #the "head client"  takes care of checking if the tmp_folder exists
         try:
@@ -212,21 +222,50 @@ class WebClient():
         except OSError:
             pass
 
-        #retrieves all the voices, stores them into a dict indexed by their names
+        try:
+            self._load_voices_from_cache()
+        except NoCacheFile:
+            #retrieves all the voices, stores them into a dict indexed by their names
+            self._update_voices_from_apis()
+            self._update_voices_cache_file(self.api_clients) #updating cache
+
+    def _update_voices_from_apis(self):
         self.voices = self.voxygen_client.get_voices() + self.acapela_client.get_voices()
         self.voices_dict = {lower(voice.name) : voice for voice in self.voices}
 
-    def _update_voices_cache_file(self, clients_list):
+    def _update_voices_cache_file(self, api_clients_list):
         """Creates (or overwrites) a json file storing the voices retrieved from the API"""
-        voices_dict = {client.client_name : [] for client in clients_list]}
+        voices_dict = {client.client_name : [] for client in api_clients_list}
         for voice in self.voices:
             voices_dict[voice.webclient.client_name].append(voice.to_dict())
 
-        return voices_dict
+        with open(join(SCRIPT_FOLDER_PATH, CACHE_FILE_NAME), "w+") as json_file:
+            json_file.write(json.dumps(voices_dict, sort_keys=True,
+                                       indent=4))
+            logging.info("Updated json voice cache file in the script's folder")
 
     def _load_voices_from_cache(self):
         """Creates the voice dict using the voice cache json file"""
-        pass
+        webclients_lookup_table = {AcapelaClient.client_name : self.acapela_client,
+                                   VoxygenClient.client_name : self.voxygen_client}
+        self.voices_dict = {}
+        try:
+            with open(join(SCRIPT_FOLDER_PATH, CACHE_FILE_NAME), "r") as json_file:
+                cache_dict = json.loads(json_file.read())
+
+            for webclient_name, client_ref in webclients_lookup_table.items():
+                for voice in cache_dict[webclient_name]:
+                    self.voices_dict[lower(voice["name"])] = Voice.instantiate_from_dict(voice, client_ref)
+
+            self.voices = chain.from_iterable(self.voices_dict.values())
+            logging.debug("Loaded voices from the cache file")
+        except IOError:
+            raise NoCacheFile()
+
+    def reload_voices_from_api(self):
+        """Updates the voices using the web apis, then updates the cache"""
+        self._update_voices_from_apis()
+        self._update_voices_cache_file(self.api_clients)
 
     def get_cache_path(self):
         """Returns the path to the folder where the fragments are stored"""
@@ -254,7 +293,7 @@ class WebClient():
         try:
             return self.voices_dict[lower(voice).strip()]
         except KeyError:
-            raise VoiceNotFound("The voice %s isn't a valid one" % voice)
+            raise VoiceNotFound(voice)
 
 
 

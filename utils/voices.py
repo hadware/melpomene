@@ -20,5 +20,9 @@ class Voice(object):
 
     def to_dict(self):
         return {"name" : self.name,
-                "language" : self.language.get_language_code(self.language)}
+                "language" : self.language}
+
+    @classmethod
+    def instantiate_from_dict(cls,voice_dict, webclient_ref):
+        return cls(voice_dict["name"], voice_dict["language"], webclient_ref)
 

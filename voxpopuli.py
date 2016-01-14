@@ -1,5 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import logging
+
+from os.path import isabs, join
+
 __author__ = 'hadware'
 
 from sys import argv
@@ -70,13 +74,22 @@ if __name__ == "__main__":
 
             try:
                 render_manager.render(text)
-            except VoiceNotFound:
-                print("Les voix ne sont pas les bonnes! Utilise l'option --voices pour afficher les voix disponibles.")
+            except VoiceNotFound as err:
+                logging.warning("Some voices are wrong. Reloading the voice cache and retrying, just in case")
+                render_manager.webclient.reload_voices_from_api()
+                try:
+                    render_manager.render(text)
+                except VoiceNotFound as err:
+                    print("La voix %s n'existe pas ! Utilise l'option --voices pour afficher les voix disponibles."
+                          % err.wrong_voice_name)
             else:
 
                 #copying the rendered file to the cwd
                 if len(argv) == 3: #if there's a new name argument
-                    render_manager.file_manager.save_render(os.getcwd() + "/" + argv[2])
+                    if isabs(argv[2]):
+                        render_manager.file_manager.save_render(argv[2])
+                    else:
+                        render_manager.file_manager.save_render(join(os.getcwd(), argv[2]))
                 else:
                     render_manager.file_manager.save_render_in_folder(os.getcwd())
 
