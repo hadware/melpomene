@@ -5,9 +5,9 @@ Un synthétiseur de dialogues. Le fonctionnement est simple: on donne en entrée
 
 ## Dépendances
 
-Pydub : il suffit de l'installer avec pydub avec:
+Pydub, lxml, cssselect et urllib1&2 : il suffit de l'installer avec pydub avec:
 
-    sudo pip install pydub
+    sudo pip install pydub cssselect lxml urllib urllib2
 
 Pydub nécessite ffmpeg (ou avconv pour ceux qui sont dans le vent). On l'installe avec:
 

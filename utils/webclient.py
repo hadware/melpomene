@@ -257,7 +257,7 @@ class WebClient():
                 for voice in cache_dict[webclient_name]:
                     self.voices_dict[lower(voice["name"])] = Voice.instantiate_from_dict(voice, client_ref)
 
-            self.voices = chain.from_iterable(self.voices_dict.values())
+            self.voices = self.voices_dict.values()
             logging.debug("Loaded voices from the cache file")
         except IOError:
             raise NoCacheFile()

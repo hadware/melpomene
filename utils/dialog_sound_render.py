@@ -37,7 +37,7 @@ class DialogSoundRender():
 
         #loading all mp3 files
         full_dialog = AudioSegment.empty()
-        silence = AudioSegment.silent(100)
+        silence = AudioSegment.silent(150)
         for i, filename in enumerate(self.file_list):
             full_dialog += AudioSegment.from_mp3(filename) + silence
 

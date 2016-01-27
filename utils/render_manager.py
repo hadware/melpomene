@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+from os.path import join
+
 __author__ = 'hadware'
 
+import hashlib
 from utils import WebClient, DialogSoundRender, DialogParser
 from utils.file_manager import VoxPopuliFileManager
 from gi.repository import GLib, GObject
+from os import makedirs
 import threading
 
 
@@ -35,7 +39,7 @@ class RenderManager():
         if self.progress_bar is not None:
             self.progress_bar.set_fraction(value)
 
-    def render(self, current_text):
+    def render(self, current_text, to_zip = False):
 
         def render_cues(dialog_cues, cache_path, sound_files, progress_update_callback = None):
             line_render_progress_increment = 0.8 / len(dialog_cues)
@@ -68,3 +72,16 @@ class RenderManager():
 
         #storing the file in the file manager
         self.file_manager.render_file_path = rendered_file
+
+        # if the to_zip flag is raised, we ask the filemanager to create a zipfile
+        if to_zip:
+            zipfile_filename = hashlib.md5(("".join(sound_files)).encode('utf8')).hexdigest()
+            zipfile_folder_path = join(self.cache_path, zipfile_filename)
+            try:
+                makedirs(join(self.cache_path, zipfile_filename))
+            except OSError:
+                pass
+
+            # TODO: copy the file to the zip folder, rename them
+            # TODO : check if the soundfile list is the absolute files
+
