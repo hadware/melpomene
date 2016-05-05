@@ -127,6 +127,7 @@ class AcapelaClient(ApiClient):
         super(AcapelaClient, self).__init__(domain, tmp_folder)
         #storing the compiled regular expression used to find the mp3 file's link in the javascript code
         self.pattern = re.compile(r"http://.*.mp3")
+        self.voices = []
 
     def _base_request(self, path):
         """Builds a base request for the voxygen api, mimicking a FF browser"""
@@ -178,6 +179,14 @@ class AcapelaClient(ApiClient):
                     self.voices.append({"name" : remove_emotive_string(voice),
                                         "language" : self.languages[sonid]["language"],
                                         "sonid" : sonid})
+
+    def get_voice_sonid(self, voice_name):
+        for single_voice_data in self.voices:
+            if single_voice_data["name"] == voice_name:
+                return single_voice_data["sonid"]
+
+    def set_sonid_for_voice(self, voice_sonid, voice_name):
+        self.voices.append({"name" : voice_name, "sonid" : voice_sonid})
 
     def get_rendered_audio(self, voice, text, filepath):
         """Retrieves a MP3 of the rendered audio, saves it in tmp_folder"""
@@ -237,7 +246,12 @@ class WebClient():
         """Creates (or overwrites) a json file storing the voices retrieved from the API"""
         voices_dict = {client.client_name : [] for client in api_clients_list}
         for voice in self.voices:
-            voices_dict[voice.webclient.client_name].append(voice.to_dict())
+
+            #todo : maybe make this cleaner as well
+            voice_entry = voice.to_dict()
+            if voice.webclient is self.acapela_client:
+                voice_entry["sonid"] = self.acapela_client.get_voice_sonid(voice.name)
+            voices_dict[voice.webclient.client_name].append(voice_entry)
 
         with open(join(SCRIPT_FOLDER_PATH, CACHE_FILE_NAME), "w+") as json_file:
             json_file.write(json.dumps(voices_dict, sort_keys=True,
@@ -256,8 +270,12 @@ class WebClient():
             for webclient_name, client_ref in webclients_lookup_table.items():
                 for voice in cache_dict[webclient_name]:
                     self.voices_dict[lower(voice["name"])] = Voice.instantiate_from_dict(voice, client_ref)
+                    # TODO : make this cleaner
+                    # adding the voice and its sonid to the acapela client
+                    if webclient_name == AcapelaClient.client_name:
+                        self.acapela_client.set_sonid_for_voice(voice["sonid"], voice["name"])
 
-            self.voices = chain.from_iterable(self.voices_dict.values())
+            self.voices = self.voices_dict.values()
             logging.debug("Loaded voices from the cache file")
         except IOError:
             raise NoCacheFile()
@@ -281,7 +299,7 @@ class WebClient():
         """Groups voices by language lists"""
         voices_dict = {i : {"name" : Language.get_language_name(i),
                             "voices" : list()} for i in range(Language.language_count)}
-        for voice in self.voices:
+        for voice in list(self.voices):
             if voice.language is not None:
                 voices_dict[voice.language]["voices"].append(voice)
 

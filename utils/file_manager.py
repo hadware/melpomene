@@ -14,7 +14,7 @@ class VoxPopuliFileManager():
     class FileType():
         SOUND, TEXT = range(2)
 
-    def new_file(self):
+    def new_file(self, widget):
         self.dialog_file_path = None
         self.render_file_path = None
 
